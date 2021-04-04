@@ -62,8 +62,10 @@ export default function Main() {
 
     return (
         <div>
-            <div className="App container">
+            <div className="setcenter">
+            <div className="App container border">
                 <h1 style={{textAlign:"center"}}>My Diary</h1>
+                <img src="https://sv1.picz.in.th/images/2021/04/04/DFRpGg.png" alt="Girl in a jacket" className="centerImage"></img>
                 <div className="information">
                     <form>
                     <div className="mb-3">
@@ -99,6 +101,7 @@ export default function Main() {
                 </div>
             </div>
 
+        </div>
         </div>
     )
 }
