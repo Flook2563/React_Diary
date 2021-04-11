@@ -12,6 +12,12 @@
   padding-bottom: 20px;
   background-color: lightgoldenrodyellow;
 }
+.border-signup{
+  outline-style: solid;
+  outline-color: rgba(201, 76, 76, 0.3);
+  padding-bottom: 20px;
+  background-color: rgb(212, 250, 255);
+}
 .setcenter{
   width: 500px;
   height: 500px;

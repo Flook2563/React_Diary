@@ -4,80 +4,87 @@ import firebase from '../Database/firebase';
 
 export default function SignUp() {
 
+
     const [messages , setMessage] = useState('');
+    const [emailCheck , setEmailCheck] = useState('');
+    const [passwordCheck , setPasswordCheck] = useState('');
 
-    const [username , setUsername] = useState('');
-    const [password , setPassword] = useState('');
-    const [copassword , setCopassword] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
-    const [checkReg , setCheckReg] = useState(false)
-
-
-    const ChangeUsername = (e) => {
-        setUsername(e.target.value);  
+    const ChangeEmail = (e) => {
+        setEmailCheck(e.target.value);  
     }
     const ChangePassword = (e) => {
-        setPassword(e.target.value);  
-    }
-    const ChangeCopassword = (e) => {
-        setCopassword(e.target.value);  
+        setPasswordCheck(e.target.value);  
     }
 
-    const onRegister = () => {
-        if (username !=="" & password !=="" & copassword !== ""){
-            if (password === copassword){
-                const DataReg= firebase.database().ref('ID');
-                //เก็บข้อมูล
-                const Data = {
-                    username,
-                    password,
-                    copassword
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (emailCheck !=="" & passwordCheck !==""){
+            if (passwordCheck.length >= 6){
+                const { email, password } = e.target.elements;
+
+                try {
+
+                    firebase.auth().createUserWithEmailAndPassword(email.value, password.value);
+                    setCurrentUser(true);
+
+                } catch(error) {
+                    alert(error);
                 }
-                //ข้อมูลบันทึกลงไปใน Firebase
-                DataReg.push(Data)
-                setCheckReg(true)
-            }
-            else{
-                setMessage("กรุณากรอก Password และ CO-Password ให้ตรงกันครับ");
-            }
-        }
-        else{
+
+            }else{
+                setMessage("กรุณากรอกรหัสผ่านมากกว่า 6 ตัวอักษร");
+            }       
+        }else{
             setMessage("กรุณากรอกข้อมูลให้ครบครับ");
         }
-        
     }
 
-    if (checkReg){
+    if (currentUser) {
         return <Redirect to="/" />
     }
 
 
-
-
     return (
-    <div>
-        <div className="container">
-            <h1 style={{textAlign:"center"}}>Register</h1>
-            <div className="information">
-                <form>
-                <p style={{textAlign:"center", color:"red"}} >{messages}</p>
-                <div className="mb">
-                    <label className="form-label" htmlFor="username">Username:</label>
-                    <input type="text" className="form-control" placeholder="Enter username" onChange={ChangeUsername} value={username} />
+        <div>
+            <div className="setcenter">
+            <div className="App container border-signup">
+                <h1 style={{textAlign:"center"}}>Register</h1>
+                <div className="information">
+                    <form onSubmit={handleSubmit}>
+                    <p style={{textAlign:"center", color:"red"}} >{messages}</p>
+                    <div className="mb">
+                        <label for="exampleInputEmail1" className="form-label">Email address</label>
+                        <input 
+                        type="email" 
+                        name="email" 
+                        className="form-control" 
+                        id="exampleInputEmail1" 
+                        placeholder="Enter Email address" 
+                        aria-describedby="emailHelp" 
+                        onChange={ChangeEmail}  
+                        value={emailCheck}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label for="exampleInputPassword1" className="form-label">Password</label>
+                        <input 
+                        type="password" 
+                        name="password" 
+                        className="form-control" 
+                        id="exampleInputPassword1" 
+                        placeholder="Enter password" 
+                        onChange={ChangePassword}  
+                        value={passwordCheck}
+                        />
+                    </div>
+                    <button type="submit" style={{width:"100%"}} class="btn btn-danger" >Submit</button>
+                    </form>
+                    <Link to="/" style={{width:"100%"}}  className="btn btn-primary">Back</Link>
                 </div>
-                <div className="mb">
-                    <label className="form-label" htmlFor="password">Password:</label>
-                    <input type="password" className="form-control" placeholder="Enter password" onChange={ChangePassword}  value={password} />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="co-password">CO-Password:</label>
-                    <input type="password" className="form-control" placeholder="Enter co-password" onChange={ChangeCopassword}  value={copassword} />
-                </div>
-                </form>
-                <button onClick={onRegister} style={{width:"100%"}}  class="btn btn-danger"> Submit </button>
-                <Link to="/" style={{width:"100%"}}  className="btn btn-primary">Back</Link>
             </div>
         </div>
-    </div>
+        </div>
     )
 }
